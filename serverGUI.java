@@ -8,9 +8,12 @@ import java.io.File;
 public class serverGUI extends JFrame implements ActionListener{
 	private JTextField folderName;
 	private JTextArea messageText;
-	public serverGUI() {
+	private my_server server;
+	public serverGUI(my_server my_server) {
 		//JFrame frame=new JFrame();
 		
+		super("my_server");
+		this.server=my_server;
 		JButton button1=new JButton("Create Folder");
 		button1.addActionListener(new ActionListener() {
 			@Override
@@ -94,7 +97,13 @@ public class serverGUI extends JFrame implements ActionListener{
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new serverGUI();
+		try {
+			my_server server=new my_server();
+			serverGUI a=new serverGUI(server);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 
 	
 
