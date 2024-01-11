@@ -11,7 +11,7 @@ public class my_client {
 		try {
 			Socket s=new Socket("localhost",6666);
 			
-			File filesend=new File("C:\\Users\\kajol\\OneDrive\\Desktop\\cnl.docx");
+			File filesend=new File("C:\\Users\\kajol\\Downloads\\Hello.txt");
 			String fileName = filesend.getName();
 	        long fileSize = filesend.length();
 			
