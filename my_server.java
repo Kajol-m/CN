@@ -1,54 +1,126 @@
 package cn_project10;
 
-import java.util.*;
-import java.io.*;
-import java.net.*;
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
+import java.awt.event.*;
+import javax.swing.*;
+import java.io.File;
+//import org.jdesktop.swingx.JXDesktopSharingServer;
 
-public class Server {
+
+public class serverGUI extends JFrame implements ActionListener{
 	
 
-	public static void main(String[] args)throws UnknownHostException,IOException {
+	private JTextField folderName;
+	private JTextArea messageText;
+	private Server server;
+	public serverGUI(Server my_server) {
+		//JFrame frame=new JFrame();
+		
+		super("Server");
+		this.server=my_server;
+		JButton button1=new JButton("Create Folder");
+		button1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				createFolder();
+			}
+		});
+		
+		JButton button2=new JButton("Rename Folder");
+		button2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				renameFolder();
+			}
+		});
+		
+		JPanel panel=new JPanel();
+		JPanel buttonpanel=new JPanel();
+		
+		panel.setBorder(BorderFactory.createEmptyBorder(50,50,10,50));
+		panel.setLayout(new GridLayout(0,1));
+		panel.add(new JLabel("FolderName: "));
+		folderName=new JTextField(20);
+		panel.add(folderName);
+		
+		buttonpanel.add(button1);
+		buttonpanel.add(button2);
+		
+		
+		
+		messageText = new JTextArea(3, 10);
+        messageText.setEditable(false);
+        add(new JScrollPane(messageText), BorderLayout.SOUTH);
+		
+		add(panel,BorderLayout.NORTH);
+		add(buttonpanel,BorderLayout.CENTER);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Operation on Folder");
+		pack();
+		setVisible(true);
+		
+		
+	}
+	
+	
+	public void createFolder() {
+		String fName=folderName.getText();
+		File folder=new File(fName);
 		try {
-			ServerSocket ss=new ServerSocket(6667);
-			while(true) {
-			Socket s=ss.accept();
-			System.out.println("Connected");
-			
-			
-			File filesend=new File("C:\\Users\\kajol\\Downloads\\Hello.txt");
-			String fileName = filesend.getName();
-	        long fileSize = filesend.length();
-			
-			DataOutputStream outputStream = new DataOutputStream(s.getOutputStream());
-			outputStream.writeUTF(fileName);
-	        outputStream.writeLong(fileSize);
-	        
-	        //sends file to client
-			FileInputStream fileInputStream= new FileInputStream(filesend);//reads file content
-			BufferedInputStream bin = new BufferedInputStream(fileInputStream);
-	        byte[] buffer = new byte[4096];
-	        int bytesRead;
-	        while ((bytesRead = bin.read(buffer)) != -1) {
-	            outputStream.write(buffer, 0, bytesRead);
-	        }
-	        
-	        bin.close();
-	        outputStream.close();
-	        s.close();
-	        System.out.println("File sent successfully!");
-	        
-	        
-	        
-		}}
-		catch (IOException e) {
+			if(folder.mkdir()) {
+				messageText.setText("Folder was created successfully");
+				
+			}
+			else {
+				messageText.setText("Failed");
+			}
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	private void renameFolder() {
+		JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int result = chooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFolder = chooser.getSelectedFile();
+            String newFolderName = folderName.getText();
+            File newFolder = new File(selectedFolder.getParentFile(), newFolderName);
+            try {
+                if (selectedFolder.renameTo(newFolder)) {
+                    messageText.setText("Folder renamed successfully.");
+                } else {
+                    messageText.setText("Failed to rename folder.");
+                }
+            } catch (Exception ex) {
+                messageText.setText("Error: " + ex.getMessage());
+            }
+        }
+	}
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		try {
+			
+			Server server=new Server();
+			serverGUI a=new serverGUI(server);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+
+	
+
+	
+		
+	}
+
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
-
-
