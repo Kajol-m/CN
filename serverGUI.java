@@ -1,56 +1,58 @@
-package cn_project_10;
+package cn_project10;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.File;
+//import org.jdesktop.swingx.JXDesktopSharingServer;
+
 
 public class serverGUI extends JFrame implements ActionListener{
+	
+
 	private JTextField folderName;
 	private JTextArea messageText;
-	private my_server server;
-	public serverGUI(my_server my_server) {
-		//JFrame frame=new JFrame();
-		
-		super("my_server");
+	private Server server;
+	public serverGUI(Server my_server) { //creates constroctor and call parent class
+		super("Server");
 		this.server=my_server;
-		JButton button1=new JButton("Create Folder");
-		button1.addActionListener(new ActionListener() {
+		JButton button1=new JButton("Create Folder");    //creates button using JButton
+		button1.addActionListener(new ActionListener() {  //add ActionListener to button
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				createFolder();
+				createFolder();  //perform createfolder
 			}
 		});
 		
-		JButton button2=new JButton("Rename Folder");
-		button2.addActionListener(new ActionListener() {
+		JButton button2=new JButton("Rename Folder");      //create button
+		button2.addActionListener(new ActionListener() {   //add actionListener to buttonm
 			public void actionPerformed(ActionEvent e) {
-				renameFolder();
+				renameFolder();   //perforn rename folder
 			}
 		});
 		
-		JPanel panel=new JPanel();
-		JPanel buttonpanel=new JPanel();
+		JPanel panel=new JPanel();//creates Panel
+		JPanel buttonpanel=new JPanel();//creates button panel
 		
-		panel.setBorder(BorderFactory.createEmptyBorder(50,50,10,50));
-		panel.setLayout(new GridLayout(0,1));
-		panel.add(new JLabel("FolderName: "));
-		folderName=new JTextField(20);
-		panel.add(folderName);
+		panel.setBorder(BorderFactory.createEmptyBorder(50,50,10,50));  //add border 
+		panel.setLayout(new GridLayout(0,1));//add alyout
+		panel.add(new JLabel("FolderName: "));//add Folder name to panel
+		folderName=new JTextField(20);//create textfield area for folder name
+		panel.add(folderName);// add textfield for folder name to panel
 		
-		buttonpanel.add(button1);
+		buttonpanel.add(button1);//add buttons to button panel
 		buttonpanel.add(button2);
 		
 		
 		
-		messageText = new JTextArea(3, 10);
+		messageText = new JTextArea(3, 10);// creates Textarea for meaasges to be shown 
         messageText.setEditable(false);
-        add(new JScrollPane(messageText), BorderLayout.SOUTH);
+        add(new JScrollPane(messageText), BorderLayout.SOUTH);//add scroll element
 		
-		add(panel,BorderLayout.NORTH);
-		add(buttonpanel,BorderLayout.CENTER);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Operation on Folder");
+		add(panel,BorderLayout.NORTH);//add panel to frame
+		add(buttonpanel,BorderLayout.CENTER);//add buttonpanel to frame
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//close frame on exit
+		setTitle("Operation on Folder");//frame title
 		pack();
 		setVisible(true);
 		
@@ -59,10 +61,10 @@ public class serverGUI extends JFrame implements ActionListener{
 	
 	
 	public void createFolder() {
-		String fName=folderName.getText();
-		File folder=new File(fName);
+		String fName=folderName.getText();//takes folder name
+		File folder=new File(fName);//assign folder name 
 		try {
-			if(folder.mkdir()) {
+			if(folder.mkdir()) {//creates colder in directory
 				messageText.setText("Folder was created successfully");
 				
 			}
@@ -76,15 +78,15 @@ public class serverGUI extends JFrame implements ActionListener{
 	
 	
 	private void renameFolder() {
-		JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int result = chooser.showOpenDialog(this);
+		JFileChooser chooser = new JFileChooser(); //creates chooser object to choose file to rename
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//all us to selec file to be renamed 
+        int result = chooser.showOpenDialog(this);//open dialog box
         if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFolder = chooser.getSelectedFile();
-            String newFolderName = folderName.getText();
+            File selectedFolder = chooser.getSelectedFile();  //selects folder
+            String newFolderName = folderName.getText();//take ne folder name
             File newFolder = new File(selectedFolder.getParentFile(), newFolderName);
             try {
-                if (selectedFolder.renameTo(newFolder)) {
+                if (selectedFolder.renameTo(newFolder)) {//remane selected folder to new name
                     messageText.setText("Folder renamed successfully.");
                 } else {
                     messageText.setText("Failed to rename folder.");
@@ -98,8 +100,9 @@ public class serverGUI extends JFrame implements ActionListener{
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
-			my_server server=new my_server();
-			serverGUI a=new serverGUI(server);
+			
+			Server server=new Server();//creates server object
+			serverGUI a=new serverGUI(server);//creates class object
 		}
 		catch(Exception e) {
 			e.printStackTrace();
